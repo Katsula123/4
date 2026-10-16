@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汽機車日報 | Auto & Moto Daily</title>
+    <style>
+        /* CSS 樣式設定 - 經典簡潔風 */
+        :root {
+            --primary-color: #1a202c;
+            --accent-color: #d97706; /* 活力橘黃 */
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 頁首 Header */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--primary-color);
+            padding: 1.5rem 1rem;
+            text-align: center;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .site-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--primary-color);
+        }
+
+        .site-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .date-badge {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        /* 導覽列 Navigation */
+        nav {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .nav-container li a {
+            display: block;
+            padding: 0.8rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s, border-bottom 0.2s;
+        }
+
+        .nav-container li a:hover {
+            color: var(--accent-color);
+        }
+
+        /* 主要內容區域 */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+            border-left: 4px solid var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* 頭條 Hero Section */
+        .hero-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            margin-bottom: 2.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .hero-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .hero-img-wrapper {
+            width: 100%;
+            height: 100%;
+            min-height: 320px;
+            background-color: #e2e8f0;
+        }
+
+        .hero-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .category-tag {
+            align-self: flex-start;
+            background-color: #fef3c7;
+            color: #b45309;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: 1.6rem;
+            line-height: 1.3;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+        }
+
+        .hero-summary {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .read-more-btn {
+            display: inline-block;
+            align-self: flex-start;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .read-more-btn:hover {
+            background-color: var(--accent-color);
+        }
+
+        /* 文章卡片網格 Layout */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-img-wrapper {
+            width: 100%;
+            height: 200px;
+            background-color: #e2e8f0;
+        }
+
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            color: var(--primary-color);
+            line-height: 1.4;
+        }
+
+        .card-summary {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            flex-grow: 1;
+            margin-bottom: 1rem;
+        }
+
+        /* 頁尾 Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: #94a3b8;
+            padding: 2rem 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer a {
+            color: #f1f5f9;
+            text-decoration: underline;
+        }
+
+        /* RWD 響應式調整 */
+        @media (max-width: 768px) {
+            .hero-card {
+                grid-template-columns: 1fr;
+            }
+            .hero-img-wrapper {
+                height: 220px;
+            }
+            .site-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頁首標題 -->
+    <header>
+        <div class="header-container">
+            <h1 class="site-title">汽機車日報</h1>
+            <p class="site-subtitle">聚焦台灣車壇動態｜最新交通法規｜國內外新車發佈</p>
+            <span class="date-badge" id="current-date">載入日期中...</span>
+        </div>
+    </header>
+
+    <!-- 導覽分類選單 -->
+    <nav>
+        <ul class="nav-container">
+            <li><a href="#">首頁焦點</a></li>
+            <li><a href="#taiwan-laws">台灣法規</a></li>
+            <li><a href="#domestic-cars">國產/進口車訊</a></li>
+            <li><a href="#motorcycles">二輪/機車專區</a></li>
+            <li><a href="#global-news">全球車企</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主要內容區 -->
+    <main class="main-container">
+
+        <!-- 今日頭條區塊 -->
+        <section>
+            <h2 class="section-title">今日頭條焦點</h2>
+            <article class="hero-card">
+                <div class="hero-img-wrapper">
+                    <!-- 汽車/交通條例示意圖 -->
+                    <img src="https://images.unsplash.com/photo-1508974239320-0a029497e820?auto=format&fit=crop&w=1000&q=80" alt="台灣交通法規重點示意圖">
+                </div>
+                <div class="hero-content">
+                    <span class="category-tag">台灣法規重點</span>
+                    <h3 class="hero-title">
+                        <a href="articles/taiwan-traffic-law-2026.html">2026 台灣道路交通安全新制重點解析：微型電動二輪車與路口執法新規</a>
+                    </h3>
+                    <p class="hero-summary">
+                        交通部針對汽機車路權與行車安全公佈最新調整條例，針對微型電動二輪車牌照管理、路口未停讓行人執法細則及道路速限調整進行全面梳理。駕駛人需特別留意最新罰則與緩衝期限...
+                    </p>
+                    <a href="articles/taiwan-traffic-law-2026.html" class="read-more-btn">閱讀全文 →</a>
+                </div>
+            </article>
+        </section>
+
+        <!-- 最新國內外文章網格 -->
+        <section id="domestic-cars">
+            <h2 class="section-title">國內車訊與即時新聞</h2>
+            <div class="news-grid">
+
+                <!-- 文章卡片 1 -->
+                <article class="card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80" alt="Toyota GR 跑車示意圖">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="category-tag">國內新車</span>
+                            <time>2026-10-16</time>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="articles/toyota-gr-taiwan-market.html">性能跑車熱度不減！Toyota GR 系列台灣市場年度銷售與未來導入展望</a>
+                        </h3>
+                        <p class="card-summary">
+                            分析 Gazoo Racing 車系（GR86, GR Supra, GR Yaris）在台灣市場的供需狀況與車主口碑，評估純燃油性能跑車的最後黃金期...
+                        </p>
+                        <a href="articles/toyota-gr-taiwan-market.html" style="font-weight: 600; font-size: 0.9rem; color: var(--accent-color);">閱讀完整報導 →</a>
+                    </div>
+                </article>
+
+                <!-- 文章卡片 2 -->
+                <article class="card" id="motorcycles">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=600&q=80" alt="重型機車示意圖">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="category-tag">二輪專區</span>
+                            <time>2026-10-15</time>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="articles/motorcycle-rights-update.html">台灣黃紅牌重機路權變革評估：路邊停車位共用政策與快速道路新規</a>
+                        </h3>
+                        <p class="card-summary">
+                            廣大二輪騎士關注的大型重型機車停車與路權議題，地方政府與交通部最新試辦計畫結果出爐，解析政策影響與騎士反響...
+                        </p>
+                        <a href="articles/motorcycle-rights-update.html" style="font-weight: 600; font-size: 0.9rem; color: var(--accent-color);">閱讀完整報導 →</a>
+                    </div>
+                </article>
+
+                <!-- 文章卡片 3 -->
+                <article class="card" id="global-news">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80" alt="全球電動車示意圖">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="category-tag">全球車企</span>
+                            <time>2026-10-14</time>
+                        </div>
+                        <h3 class="card-title">
+                            <a href="articles/global-ev-hybrid-strategy.html">油電與純電並行！全球各大車企修正 2030 電氣化戰略目標佈局</a>
+                        </h3>
+                        <p class="card-summary">
+                            包含豐田、日產與歐系品牌在內，全球車廠因應市場需求調整純電（BEV）與油電混合（PHEV/HEV）開發比重，對國內車市產生的影響...
+                        </p>
+                        <a href="articles/global-ev-hybrid-strategy.html" style="font-weight: 600; font-size: 0.9rem; color: var(--accent-color);">閱讀完整報導 →</a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer>
+        <p>© 2026 汽機車日報 Auto & Moto Daily | 每日為您提供最新車壇資訊</p>
+        <p style="margin-top: 0.5rem;">Hosted on <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a></p>
+    </footer>
+
+    <!-- 自動顯示當前日期指令 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateElement = document.getElementById('current-date');
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            dateElement.textContent = now.toLocaleDateString('zh-TW', options);
+        });
+    </script>
+</body>
+</html>
